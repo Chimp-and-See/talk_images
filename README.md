@@ -1,11 +1,11 @@
-Zooniverse Citizen Image Uploader
+# Zooniverse Citizen Image Uploader
 
 Welcome! This repository powers a community image upload system for citizen scientists participating in Zooniverse projects. You can drag and drop images through GitHub Issues — no coding required — and get back direct links you can paste into Zooniverse Talk.
 
 📸 Anyone with a GitHub account can contribute. The system will automatically validate, process, and publish your images.
 
 
-How It Works
+# How It Works
 
 Go to the Issues tab → Click New Issue → Choose Upload image(s).
 
@@ -24,7 +24,7 @@ Markdown snippets ready to paste into Zooniverse Talk
 Your images will appear in this repository under the /images directory and will be listed in images/index.json for programmatic access.
 
 
-What Happens Under the Hood
+# What Happens Under the Hood
 
 Images are downloaded from the GitHub issue post.
 
@@ -37,7 +37,7 @@ A central index.json is updated to include uploader, timestamp, and alt-text.
 A GitHub Actions bot posts a comment back on your issue with links.
 
 
-Rules & Guidelines
+# Rules & Guidelines
 
 ✅ You must have the rights to share the images (e.g., you took the photo or it's CC BY).
 
