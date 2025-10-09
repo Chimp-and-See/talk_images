@@ -1,0 +1,25 @@
+name: Process Uploaded Images
+
+on:
+  push:
+    paths:
+      - 'upload_here/**'
+
+jobs:
+  process-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install pillow
+
+      - name: Run image processing script
+        run: python scripts/process_images.py
