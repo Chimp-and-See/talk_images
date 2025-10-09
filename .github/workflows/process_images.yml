@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'upload_here/**'
+  workflow_dispatch:  # 👈 Manual trigger added
 
 jobs:
   process-images:
