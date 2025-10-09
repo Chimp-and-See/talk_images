@@ -1,47 +1,36 @@
 import os
 from PIL import Image
-import shutil
 
-# 🔧 Configurable size limit in bytes
-SIZE_LIMIT = 150 * 1024  # 150KB
+UPLOAD_DIR = "upload_here"
+OUTPUT_DIR = "images"
+SIZE_LIMIT = int(os.environ.get("SIZE_LIMIT_KB", 150)) * 1024  # in bytes
 
-# 📁 Define folders
-upload_folder = "upload_here"
-output_folder = "images"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# Ensure output folder exists
-os.makedirs(output_folder, exist_ok=True)
-
-# Process each file in the upload folder
-for filename in os.listdir(upload_folder):
-    file_path = os.path.join(upload_folder, filename)
-
-    # Skip non-files
-    if not os.path.isfile(file_path):
+for filename in os.listdir(UPLOAD_DIR):
+    filepath = os.path.join(UPLOAD_DIR, filename)
+    if not os.path.isfile(filepath):
         continue
 
-    # Check file size
-    file_size = os.path.getsize(file_path)
-
-    # Open image
     try:
-        with Image.open(file_path) as img:
-            if file_size > SIZE_LIMIT:
-                # Resize image by reducing quality until under size limit
+        with Image.open(filepath) as img:
+            original_size = os.path.getsize(filepath)
+            if original_size > SIZE_LIMIT:
+                # Resize and convert to JPEG
+                img = img.convert("RGB")
+                output_path = os.path.join(OUTPUT_DIR, os.path.splitext(filename)[0] + ".jpg")
                 quality = 85
-                resized_path = os.path.join(output_folder, os.path.splitext(filename)[0] + ".jpg")
                 while True:
-                    img.convert("RGB").save(resized_path, format="JPEG", quality=quality)
-                    if os.path.getsize(resized_path) <= SIZE_LIMIT or quality <= 10:
+                    img.save(output_path, "JPEG", quality=quality)
+                    if os.path.getsize(output_path) <= SIZE_LIMIT or quality <= 10:
                         break
                     quality -= 5
             else:
-                # Copy image as-is to output folder
-                output_path = os.path.join(output_folder, filename)
-                shutil.copy2(file_path, output_path)
+                # Save without resizing, retain original format
+                output_path = os.path.join(OUTPUT_DIR, filename)
+                img.save(output_path)
+
+        os.remove(filepath)
+
     except Exception as e:
         print(f"Skipping {filename}: {e}")
-        continue
-
-    # Delete original file
-    os.remove(file_path)
