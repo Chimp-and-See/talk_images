@@ -22,8 +22,5 @@ for filename in os.listdir(IMAGE_DIR):
                         break
                     quality -= 5
                 os.remove(filepath)
-            else:
-                # Keep original format and name
-                pass
     except Exception as e:
         print(f"Error processing {filename}: {e}")
