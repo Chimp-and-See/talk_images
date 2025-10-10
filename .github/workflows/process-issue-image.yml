@@ -6,7 +6,7 @@ on:
 
 jobs:
   process-image:
-    if: contains(github.event.issue.labels.*.name, 'image-upload')
+    #if: contains(github.event.issue.labels.*.name, 'image-upload')
     runs-on: ubuntu-latest
 
     env:
