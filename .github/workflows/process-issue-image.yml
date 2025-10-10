@@ -25,7 +25,7 @@ jobs:
             const regex = /(https:\/\/user-images\.githubusercontent\.com\/[^\s]+)/g;
             const matches = issueBody.match(regex);
             if (matches) {
-              const {{ execSync }} = require('child_process');
+              const { execSync } = require('child_process');
               matches.slice(0, 5).forEach((url, i) => {
                 const filename = `uploaded_${i}`;
                 execSync(`curl -L "${url}" -o "images/${filename}"`);
