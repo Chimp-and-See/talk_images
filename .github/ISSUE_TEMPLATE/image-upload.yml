@@ -1,0 +1,16 @@
+name: Upload Image
+description: Upload an image to be processed and added to the repository.
+title: "[Image Upload] "
+labels: [image-upload]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please upload your image below. Only one image per issue is supported.
+
+  - type: input
+    id: image
+    attributes:
+      label: Image File
+      description: Drag and drop your image file here.
+      placeholder: "Upload your image file"
