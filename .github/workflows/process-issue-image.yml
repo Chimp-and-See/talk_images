@@ -1,3 +1,65 @@
+name: Process Issue Images
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process-image:
+    runs-on: ubuntu-latest
+    env:
+      SIZE_LIMIT_KB: 150
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow
+
+      - name: Download images from issue body
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ toJson(github.event.issue.body) }}
+        run: |
+          mkdir -p images
+          # find URLs in the issue body that point to GitHub user-images and download up to 5
+          echo "Issue body: $ISSUE_BODY"
+          urls=( $(echo "$ISSUE_BODY" | grep -oE 'https://user-images\.githubusercontent\.com/[^\s]+' | head -n 5) )
+          i=0
+          for url in "${urls[@]}"; do
+            ext="${url##*.}"
+            out="images/uploaded_${i}.${ext}"
+            echo "Downloading $url -> $out"
+            curl -fsSL "$url" -o "$out" || echo "Failed to download $url"
+            i=$((i+1))
+          done
+
+      - name: Process images
+        run: |
+          python scripts/process_images.py --input images --output images
+
+      - name: Commit processed images
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add images/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Processed images from issue #${{ github.event.issue.number }}"
+            git push
+          fi
 name: Process Image from Issue
 
 on:

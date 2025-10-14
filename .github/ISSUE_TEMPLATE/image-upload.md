@@ -1,4 +1,30 @@
 ---
+name: Image upload
+about: Upload 1–5 images to be processed and published to the repository
+title: "Image upload: [short caption]"
+labels: image-upload
+---
+
+Please attach 1–5 image files (JPG/PNG/WebP). Add an optional caption or description below.
+
+Notes and rules:
+- Max 5 files per issue.
+- Accepted formats: JPG, PNG, WebP (we prefer common image formats).
+- Files larger than the configured size limit will be resized and saved as JPEG.
+- Files at or below the size limit will be kept in their original format.
+- Do not include private or sensitive content.
+
+Optional caption / notes:
+
+```
+<paste your caption here>
+```
+
+What happens next
+- An automated workflow will download and process your images. Processed images will appear in the repository's `images/` folder and you will receive a comment with links.
+
+If you are reporting a problem with a processed image, please reply to the bot comment with details.
+---
 name: Image Upload
 about: Upload up to 5 images to be processed and added to the repository
 title: "[Image Upload] "
